@@ -135,6 +135,10 @@ import java.util.List;
  * @since 1.5
  * @author Doug Lea
  */
+
+/**
+ * 扩展了Executor，添加了生命周期管理的方法
+ */
 public interface ExecutorService extends Executor {
 
     /**
@@ -153,6 +157,9 @@ public interface ExecutorService extends Executor {
      *         java.lang.RuntimePermission}{@code ("modifyThread")},
      *         or the security manager's {@code checkAccess} method
      *         denies access.
+     */
+    /*
+    启动一次顺序关闭，在此之后，执行器将不再接受新任务，但是已提交的任务会继续执行直到完成。
      */
     void shutdown();
 
@@ -179,12 +186,19 @@ public interface ExecutorService extends Executor {
      *         or the security manager's {@code checkAccess} method
      *         denies access.
      */
+    /*
+    尝试停止所有正在执行的活动任务，暂停处理正在等待的任务，并返回等待执行的任务列表。
+     */
     List<Runnable> shutdownNow();
 
     /**
      * Returns {@code true} if this executor has been shut down.
      *
      * @return {@code true} if this executor has been shut down
+     */
+
+    /*
+    如果此执行器已关闭，则返回true。
      */
     boolean isShutdown();
 
@@ -194,6 +208,9 @@ public interface ExecutorService extends Executor {
      * either {@code shutdown} or {@code shutdownNow} was called first.
      *
      * @return {@code true} if all tasks have completed following shut down
+     */
+    /*
+    如果关闭后所有任务都已完成，则返回true。
      */
     boolean isTerminated();
 
@@ -248,6 +265,10 @@ public interface ExecutorService extends Executor {
      * @throws RejectedExecutionException if the task cannot be
      *         scheduled for execution
      * @throws NullPointerException if the task is null
+     */
+
+    /*
+提交一个Runnable任务去执行，并且当该任务完成时，可以通过Future得到一个预设的结果T
      */
     <T> Future<T> submit(Runnable task, T result);
 
@@ -338,6 +359,10 @@ public interface ExecutorService extends Executor {
      * @throws ExecutionException if no task successfully completes
      * @throws RejectedExecutionException if tasks cannot be scheduled
      *         for execution
+     */
+    /*
+    返回成功执行的第一个任务。
+    使用场景：从多个镜像获取内容，只要有一个成功即可。
      */
     <T> T invokeAny(Collection<? extends Callable<T>> tasks)
         throws InterruptedException, ExecutionException;
